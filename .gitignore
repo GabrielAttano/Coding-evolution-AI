@@ -1,0 +1,37 @@
+# Byte-compiled / optimized Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+*.env/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Compiled files
+*.pyc
+*.pyo
+
+# Logs and databases
+*.log
+*.sqlite
+
+# Temporary files
+*.bak
+*.swp
+*~
+
+# Dependency directories
+lib/
+libs/
+dist/
+build/
+egg-info/
+
+# Local configuration file
+*.local
