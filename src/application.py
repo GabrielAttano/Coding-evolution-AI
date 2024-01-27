@@ -1,4 +1,4 @@
-from src.service.worldService import generateWorld, printWorld, insertCreature
+from src.service.worldService import generateWorld, printWorld, insertCreature, paintWorld
 from src.service.creatureService import generateCreatureWithGenome
 from src.service.geneticsService import generateInputNeurons, generateActionNeurons
 import src.service.actionNeuronService as acNeuronService
@@ -11,7 +11,9 @@ import time
 import os
 
 world = World()
-generateWorld(world, 10)
+worldSize = 3000
+
+generateWorld(world, worldSize)
 
 creature = generateCreatureWithGenome(5, 5)
 # for gene in creature.genome:
@@ -19,19 +21,19 @@ creature = generateCreatureWithGenome(5, 5)
 #     print(decodeGene(gene))
 
 
-insertCreature(world, 5, 0, creature)
+insertCreature(world, int(worldSize/2), int(worldSize/2), creature)
 # printWorld(world)
 # print(world.population)
 
 os.system("cls")
-printWorld(world)
-time.sleep(1)
+# printWorld(world)
+# paintWorld(world)
+# time.sleep(1)
 
 for i in range(0, 60):
     acNeuronService.doAction(world, creature, acNeuronService.Actions.MOVE_RANDOM)
     os.system("cls")
-    printWorld(world)
-    time.sleep(1)
+    paintWorld(world, False)
 
 
 
