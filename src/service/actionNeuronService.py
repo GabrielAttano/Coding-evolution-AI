@@ -1,7 +1,7 @@
 from src.model.creature import Creature, facingDirection
 from src.model.world import World, CellData
 
-from src.service.actionNeuronFunctions import Actions
+from src.service.functions.actionNeuronFunctions import Actions
 
 import random
 

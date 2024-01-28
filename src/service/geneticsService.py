@@ -2,8 +2,8 @@ import secrets
 
 from src.model.genetics import Neuron, NeuronTypes, SensoryNeuron, ActionNeuron, IntermediateNeuron
 
-import src.service.sensoryNeuronFunctions as snFunctions
-import src.service.actionNeuronFunctions as acFunctions
+import src.service.functions.sensoryNeuronFunctions as snFunctions
+import src.service.functions.actionNeuronFunctions as acFunctions
 
 def generateRandomGene() -> str:
     random_hex = secrets.token_hex(4)

@@ -4,7 +4,6 @@ from src.model.creature import Creature, facingDirection
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-import time
 
 def generateWorld(world: World, worldSize: int):
         world.worldSize = worldSize
