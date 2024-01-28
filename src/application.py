@@ -7,38 +7,53 @@ from src.model.world import World
 from src.model.genetics import Neuron, NeuronTypes, SensoryNeuron
 from src.model.creature import Creature
 
-import time
+import json
 import os
 
-world = World()
-worldSize = 3000
+class simulationHandler:
+    pass
 
-generateWorld(world, worldSize)
+if __name__ == "__main__":
+    scriptPath = os.path.abspath(__file__)
+    configuration_path = os.path.join(os.path.dirname(scriptPath), 'simulationSettings.json')
 
-creature = generateCreatureWithGenome(5, 5)
+    settings = dict()
+    with open(configuration_path, 'r') as file:
+        settings = json.load(file)
+    
+    creatureSettings = settings["creatureSettings"]
+    worldSettings = settings["worldSettings"]
+
+
+# world = World()
+# worldSize = 3000
+
+# generateWorld(world, worldSize)
+
+# creature = generateCreatureWithGenome(5, 5)
 # for gene in creature.genome:
 #     print(gene)
 #     print(decodeGene(gene))
 
 
-insertCreature(world, int(worldSize/2), int(worldSize/2), creature)
+# insertCreature(world, int(worldSize/2), int(worldSize/2), creature)
 # printWorld(world)
 # print(world.population)
 
-os.system("cls")
+# os.system("cls")
 # printWorld(world)
 # paintWorld(world)
 # time.sleep(1)
 
-for i in range(0, 60):
-    acNeuronService.doAction(world, creature, acNeuronService.Actions.MOVE_RANDOM)
-    os.system("cls")
-    paintWorld(world, False)
+# for i in range(0, 60):
+#     acNeuronService.doAction(world, creature, acNeuronService.Actions.MOVE_RANDOM)
+#     os.system("cls")
+#     paintWorld(world, False)
 
 
 
-sensoryNeurons = generateInputNeurons()
-actionNeurons = generateActionNeurons()
+# sensoryNeurons = generateInputNeurons()
+# actionNeurons = generateActionNeurons()
 # for sensoryNeuron in sensoryNeurons:
 #     print(sensoryNeuron.name)
 # for actionNeuron in actionNeurons:

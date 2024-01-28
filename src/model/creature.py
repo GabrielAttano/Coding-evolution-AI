@@ -9,7 +9,7 @@ class facingDirection(Enum):
     LEFT = "Left"
 
 class Creature:
-    def __init__(self, genomeLength: int = 4, innerNeurons: int = 1) -> None:
+    def __init__(self, genomeLength: int, innerNeurons: int, maxAge: int) -> None:
         self.genomeLength = genomeLength
         self.innerNeurons = innerNeurons
         self.genome = list()
@@ -19,7 +19,7 @@ class Creature:
         self.brain = Brain()
 
         self.age = 0
-        self.maxAge = 10
+        self.maxAge = maxAge
 
         self.positionX = 0
         self.positionY = 0

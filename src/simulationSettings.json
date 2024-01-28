@@ -1,0 +1,14 @@
+{
+    "creatureSettings": 
+    {
+        "genomeLength": 4,
+        "innerNeurons": 1,
+        "weightDivisor": 8000,
+        "maxAge": 20
+    },
+    "worldSettings":
+    {
+        "worldSize": 1000,
+        "startPopulation": 1
+    }
+}
