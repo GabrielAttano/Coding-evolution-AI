@@ -1,6 +1,6 @@
 import secrets
 
-from src.model.genetics import Neuron, NeuronTypes, SensoryNeuron, ActionNeuron
+from src.model.genetics import Neuron, NeuronTypes, SensoryNeuron, ActionNeuron, IntermediateNeuron
 
 import src.service.sensoryNeuronFunctions as snFunctions
 import src.service.actionNeuronFunctions as acFunctions
@@ -92,3 +92,9 @@ def generateActionNeurons() -> list:
     ))
 
     return actionNeurons
+
+def generateIntermediateNeurons(total: int) -> list:
+    intermediateNeurons = list()
+    for i in range(total):
+        name = "intermediate neuron" + str(i)
+        intermediateNeurons.append(IntermediateNeuron(name))
