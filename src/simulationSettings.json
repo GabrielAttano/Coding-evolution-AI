@@ -10,5 +10,6 @@
     {
         "worldSize": 1000,
         "startPopulation": 1
-    }
+    },
+    "debug": true
 }
