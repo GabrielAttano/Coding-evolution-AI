@@ -11,14 +11,18 @@ class Neuron:
         self.type = type
         self.inputValue = 0.0
         self.outputValue = 0.0
-        self.inputConnections = list()
-        self.outputConnections = list()
+        # self.inputConnections = list()
+        # self.outputConnections = list()
         
 class SensoryNeuron(Neuron):
     def __init__(self, name: str, sensoryFunction: callable) -> None:
         super().__init__(NeuronTypes.SENSORY, name)
         self.sensoryFunction = sensoryFunction
         
+class IntermediateNeuron(Neuron):
+    def __init__(self, name: str) -> None:
+        super().__init__(NeuronTypes.INTERMEDIATE, name)
+
 class ActionNeuron(Neuron):
     def __init__(self, name: str, actionFunction: callable) -> None:
         super().__init__(NeuronTypes.ACTION, name)
