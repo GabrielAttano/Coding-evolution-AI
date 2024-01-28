@@ -1,19 +1,7 @@
-from src.service.worldService import generateWorld, printWorld, insertCreature, paintWorld
-from src.service.creatureService import generateCreatureWithGenome
-from src.service.geneticsService import generateInputNeurons, generateActionNeurons
-import src.service.actionNeuronService as acNeuronService
-
-from src.model.world import World
-from src.model.genetics import Neuron, NeuronTypes, SensoryNeuron
-from src.model.creature import Creature
-
 import json
 import os
 
-class simulationHandler:
-    pass
-
-if __name__ == "__main__":
+def loadSettings() -> dict:
     scriptPath = os.path.abspath(__file__)
     configuration_path = os.path.join(os.path.dirname(scriptPath), 'simulationSettings.json')
 
@@ -21,8 +9,11 @@ if __name__ == "__main__":
     with open(configuration_path, 'r') as file:
         settings = json.load(file)
     
-    creatureSettings = settings["creatureSettings"]
-    worldSettings = settings["worldSettings"]
+    return settings
+
+if __name__ == "__main__":
+    settings = loadSettings()
+    
 
 
 # world = World()
