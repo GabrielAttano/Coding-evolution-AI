@@ -98,3 +98,4 @@ def generateIntermediateNeurons(total: int) -> list:
     for i in range(total):
         name = "intermediate neuron" + str(i)
         intermediateNeurons.append(IntermediateNeuron(name))
+    return intermediateNeurons
