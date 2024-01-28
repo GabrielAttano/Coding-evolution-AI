@@ -1,10 +1,15 @@
 from src.model.creature import Creature
 from src.service.geneticsService import generateRandomGene
 
-def generateCreatureWithGenome(genomeLength: int, innerNeurons: int) -> Creature:
-    creature = Creature(genomeLength, innerNeurons)
-    
-    for i in range(0, genomeLength):
+def generateCreatureWithGenome(settings) -> Creature:
+    # creature = Creature(genomeLength, innerNeurons)
+    creature = Creature(
+        settings["genomeLength"],
+        settings["innerNeurons"],
+        settings["maxAge"]
+    )
+
+    for i in range(0, creature.genomeLength):
         newGene = generateRandomGene()
         creature.genome.append(newGene)
 
