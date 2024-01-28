@@ -4,6 +4,7 @@ from src.model.creature import Creature, facingDirection
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
+import random
 
 def generateWorld(world: World, worldSize: int):
         world.worldSize = worldSize
@@ -57,3 +58,11 @@ def insertCreature(world: World, posX: int, posY: int, creature: Creature):
         creature.positionX = posX
         creature.positionY = posY
         world.population += 1
+
+def insertCreatureRandomPosition(world: World, creature: Creature):
+    currentWorldPop = world.population
+    while currentWorldPop == world.population:
+        randomX = random.randint(0, world.worldSize - 1)
+        randomY = random.randint(0, world.worldSize - 1)
+        insertCreature(world, randomX, randomY, creature)
+
