@@ -1,5 +1,6 @@
 from model.world import World
 from model.creature import Creature
+from model.brain import Brain, Connection
 
 from service.worldService import generateWorld, insertCreatureRandomPosition
 from service.creatureService import generateCreatureWithGenome
@@ -61,7 +62,14 @@ def handleSimulation(settings: dict):
         print("Generating brains")
     
     for creature in creatures:
+        if isDebug: print("-------------------------")
         generateCreatureBrain(creature, sensoryNeurons, actionNeurons, creatureSettings["weightDivisor"])
+        if isDebug:
+            brain: Brain = creature.brain
+            print(f"Total sensory neurons: {str(len(brain.sensoryNeurons))}")
+            print(f"Total intermediate neurons: {str(len(brain.intermediateNeurons))}")
+            print(f"Total action neurons: {str(len(brain.actionNeurons))}")
+            print("-------------------------")
 
     if isDebug:
         print("Finished generating creature's brains")
