@@ -43,7 +43,7 @@ def paintWorld(world: World, saveMode: bool):
         for col in range(world.worldSize):
             if world.cells[row][col].isCreature:
                 x, y = row, col
-                cv2.circle(blank_image, (y, x), radius = 5, color=(0, 0, 255), thickness=-1)
+                cv2.circle(blank_image, (y, x), radius = 2, color=(0, 0, 255), thickness=-1)
 
     if not saveMode:
         plt.imshow(blank_image)
