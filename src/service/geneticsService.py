@@ -9,20 +9,6 @@ def generateRandomGene() -> str:
     random_hex = secrets.token_hex(4)
     return random_hex
 
-def decodeGene(gene: str) -> list:
-    # Transforms the hexadecimal to binary
-    decodedBinary = list()
-    binary_string = ''.join(format(int(digit, 16), '04b') for digit in gene)
-    
-    # separates the binary
-    decodedBinary.append(binary_string[0])
-    decodedBinary.append(binary_string[1:8])
-    decodedBinary.append(binary_string[8:9])
-    decodedBinary.append(binary_string[9:16])
-    decodedBinary.append(binary_string[16:32])
-
-    return decodedBinary
-
 def generateInputNeurons() -> list:
     inputNeurons = list()
 
@@ -96,6 +82,6 @@ def generateActionNeurons() -> list:
 def generateIntermediateNeurons(total: int) -> list:
     intermediateNeurons = list()
     for i in range(total):
-        name = "intermediate neuron" + str(i)
+        name = "IN" + str(i)
         intermediateNeurons.append(IntermediateNeuron(name))
     return intermediateNeurons
