@@ -52,5 +52,4 @@ def moveRandom(creature: Creature, input: float):
         return Actions.MOVE_RANDOM
 
 def setResponsiveness(creature: Creature, input: float):
-    value = input * creature.responsiveness
-    creature.responsiveness = value
+    creature.responsiveness = input
