@@ -13,27 +13,27 @@ def generateInputNeurons() -> list:
     inputNeurons = list()
 
     inputNeurons.append(SensoryNeuron(
-        name="x distance",
+        name="S_xDist",
         sensoryFunction=snFunctions.xDistanceFunction
     ))
 
     inputNeurons.append(SensoryNeuron(
-        name="y distance",
+        name="S_yDist",
         sensoryFunction=snFunctions.yDistanceFunction
     ))
 
     inputNeurons.append(SensoryNeuron(
-        name="random input",
+        name="S_rand",
         sensoryFunction=snFunctions.randomInput
     ))
 
     inputNeurons.append(SensoryNeuron(
-        name="facing creature",
+        name="S_facCreat",
         sensoryFunction=snFunctions.facingCreature
     ))
 
     inputNeurons.append(SensoryNeuron(
-        name="adjacent to creature",
+        name="S_adjCreat",
         sensoryFunction=snFunctions.adjacentToCreature
     ))
 
@@ -43,37 +43,37 @@ def generateActionNeurons() -> list:
     actionNeurons = list()
 
     actionNeurons.append(ActionNeuron(
-        name="move forward facing",
+        name="A_mvFwdF",
         actionFunction=acFunctions.moveForwardFacing
     ))
 
     actionNeurons.append(ActionNeuron(
-        name="move reverse facing",
+        name="A_mvRvsF",
         actionFunction=acFunctions.moveReverseFacing
     ))
 
     actionNeurons.append(ActionNeuron(
-        name="move rightleft facing",
+        name="A_mvRlF",
         actionFunction=acFunctions.moveRightLeftFacing
     ))
 
     actionNeurons.append(ActionNeuron(
-        name="move upbottom world",
+        name="A_mvUpbtW",
         actionFunction=acFunctions.moveUpBottomWorld
     ))
 
     actionNeurons.append(ActionNeuron(
-        name="move rightleft world",
+        name="A_mvRlW",
         actionFunction=acFunctions.moveRightLeftWorld
     ))
 
     actionNeurons.append(ActionNeuron(
-        name="move random",
+        name="A_mvRand",
         actionFunction=acFunctions.moveRandom
     ))
 
     actionNeurons.append(ActionNeuron(
-        name="set responsiveness",
+        name="A_setResp",
         actionFunction=acFunctions.setResponsiveness
     ))
 
@@ -82,6 +82,6 @@ def generateActionNeurons() -> list:
 def generateIntermediateNeurons(total: int) -> list:
     intermediateNeurons = list()
     for i in range(total):
-        name = "IN" + str(i)
+        name = "I_" + str(i)
         intermediateNeurons.append(IntermediateNeuron(name))
     return intermediateNeurons
