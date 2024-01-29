@@ -11,25 +11,11 @@ def generateCreatureBrain(creature: Creature, sensoryNeurons: list, actionNeuron
 
         # Gets the source neuron
         sourceType = NeuronTypes.SENSORY if binaryGene[0] == "0" else NeuronTypes.INTERMEDIATE
-        sourceNeuron: Neuron = None
-
-        if sourceType.value == NeuronTypes.SENSORY.value:
-            index = int(binaryGene[1], 2) % len(sensoryNeurons)
-            sourceNeuron: SensoryNeuron = sensoryNeurons[index]
-        else:
-            index = int(binaryGene[1], 2) % len(creature.brain.intermediateNeurons)
-            sourceNeuron: IntermediateNeuron = creature.brain.intermediateNeurons[index]
+        sourceNeuron: Neuron = getSourceNeuron(creature, sensoryNeurons, binaryGene)
 
         # Gets the sink neuron
         sinkType = NeuronTypes.INTERMEDIATE if binaryGene[2] == "0" else NeuronTypes.ACTION
-        sinkNeuron: Neuron = None
-
-        if sinkType.value == NeuronTypes.INTERMEDIATE.value:
-            index = int(binaryGene[3], 2) % len(creature.brain.intermediateNeurons)
-            sinkNeuron: IntermediateNeuron = creature.brain.intermediateNeurons[index]
-        else:
-            index = int(binaryGene[3], 2) % len(actionNeurons)
-            sinkNeuron: ActionNeuron = actionNeurons[index]
+        sinkNeuron: Neuron = getSinkNeuron(creature, actionNeurons, binaryGene)
         
         # Gets the weight of the connection
         sign = 1 if binaryGene[4][0] == '0' else -1
@@ -37,6 +23,33 @@ def generateCreatureBrain(creature: Creature, sensoryNeurons: list, actionNeuron
         weight = decimalValue / weightDivisor
         
         print("source: " + sourceNeuron.name + " | Sink: " + sinkNeuron.name + " | weight: " + str(weight))
+
+def getSourceNeuron(creature: Creature, sensoryNeurons: list, binaryGene: list()) -> Neuron:
+    # Gets the source neuron
+    sourceType = NeuronTypes.SENSORY if binaryGene[0] == "0" else NeuronTypes.INTERMEDIATE
+    sourceNeuron: Neuron = None
+
+    if sourceType.value == NeuronTypes.SENSORY.value:
+        index = int(binaryGene[1], 2) % len(sensoryNeurons)
+        sourceNeuron: SensoryNeuron = sensoryNeurons[index]
+    else:
+        index = int(binaryGene[1], 2) % len(creature.brain.intermediateNeurons)
+        sourceNeuron: IntermediateNeuron = creature.brain.intermediateNeurons[index]
+    
+    return sourceNeuron
+
+def getSinkNeuron(creature: Creature, actionNeurons: list, binaryGene: list()) -> Neuron:
+    sinkType = NeuronTypes.INTERMEDIATE if binaryGene[2] == "0" else NeuronTypes.ACTION
+    sinkNeuron: Neuron = None
+
+    if sinkType.value == NeuronTypes.INTERMEDIATE.value:
+        index = int(binaryGene[3], 2) % len(creature.brain.intermediateNeurons)
+        sinkNeuron: IntermediateNeuron = creature.brain.intermediateNeurons[index]
+    else:
+        index = int(binaryGene[3], 2) % len(actionNeurons)
+        sinkNeuron: ActionNeuron = actionNeurons[index]
+
+    return sinkNeuron
 
 def decodeGeneToBinary(gene: str) -> list:
     # Transforms the hexadecimal to binary
