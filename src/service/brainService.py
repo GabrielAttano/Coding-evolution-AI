@@ -1,9 +1,12 @@
 from model.creature import Creature
 from model.genetics import ActionNeuron, SensoryNeuron, IntermediateNeuron, NeuronTypes, Neuron
-
+from model.brain import Connection
 from service.geneticsService import generateIntermediateNeurons
 
+import copy
+
 def generateCreatureBrain(creature: Creature, sensoryNeurons: list, actionNeurons: list, weightDivisor: int):
+    # generate all intermediateNeurons
     creature.brain.intermediateNeurons = generateIntermediateNeurons(creature.innerNeurons)
 
     for gene in creature.genome:
@@ -22,7 +25,85 @@ def generateCreatureBrain(creature: Creature, sensoryNeurons: list, actionNeuron
         decimalValue = int(binaryGene[4][1:], 2) * sign
         weight = decimalValue / weightDivisor
         
-        print("source: " + sourceNeuron.name + " | Sink: " + sinkNeuron.name + " | weight: " + str(weight))
+        # print("Raw neurons:")
+        # print(sourceNeuron)
+        # print(sinkNeuron)
+        # print(weight)
+        # print("source: " + sourceNeuron.name + " | Sink: " + sinkNeuron.name + " | weight: " + str(weight))
+
+        connection: Connection = createConnection(creature, sourceNeuron, sinkNeuron, weight)
+
+        print("Connection:")
+        # print(connection.sourceNeuron)
+        # print(connection.sinkNeuron)
+        # print(connection.weight)
+        print("source: " + connection.sourceNeuron.name + " | Sink: " + connection.sinkNeuron.name + " | weight: " + str(connection.weight))
+
+        creature.brain.connections.append(connection)
+
+def createConnection(creature: Creature, sourceNeuron: Neuron, sinkNeuron: Neuron, weight: float) -> Connection:
+    connection = Connection()
+    # ======= Weight =======
+    connection.weight = weight
+
+    # ======= Source neuron connection =======
+    if sourceNeuron.type.value == NeuronTypes.SENSORY.value:
+        # get the sensory neuron if it exists
+        sensoryNeuron: SensoryNeuron = getSourceNeuronInBrain(creature, sourceNeuron)
+        if sensoryNeuron == None:
+            # if the neuron doesn't exist already in brain
+            # create a shallow copy of it and insert in the brain
+            sensoryNeuron = copy.copy(sourceNeuron)
+            creature.brain.sensoryNeurons.append(sensoryNeuron)
+        connection.sourceNeuron = sensoryNeuron
+    elif sourceNeuron.type.value == NeuronTypes.INTERMEDIATE.value:
+        # get the intermediate neuron
+        intermediateNeuron: IntermediateNeuron = getIntermediateNeuronInBrain(creature, sourceNeuron)
+        if intermediateNeuron == None:
+            # if it doesnt exist, there is something wrong
+            print("Couldnt find intermediate neuron in brain. Finishing...")
+            return
+
+        connection.sourceNeuron = intermediateNeuron
+
+    # ======= Sink neuron connection =======
+    if sinkNeuron.type.value == NeuronTypes.ACTION.value:
+        # Get the action neuron if it exists
+        actionNeuron: ActionNeuron = getSinkNeuronInBrain(creature, sinkNeuron)
+        if actionNeuron == None:
+            # if the neuron doesn't exist already in brain
+            # create a shallow copy of it and insert in the brain
+            actionNeuron = copy.copy(sinkNeuron)
+            creature.brain.actionNeurons.append(copy.copy(actionNeuron))
+        connection.sinkNeuron = actionNeuron
+    elif sinkNeuron.type.value == NeuronTypes.INTERMEDIATE.value:
+        # get the intermediate neuron
+        intermediateNeuron: IntermediateNeuron = getIntermediateNeuronInBrain(creature, sinkNeuron)
+        if intermediateNeuron == None:
+            # if it doesnt exist, there is something wrong
+            print("Couldnt find intermediate neuron in brain. Finishing...")
+            return
+
+        connection.sinkNeuron = intermediateNeuron
+
+    return connection
+
+def getSinkNeuronInBrain(creature: Creature, neuron: Neuron) -> ActionNeuron:
+    for actionNeuron in creature.brain.actionNeurons:
+        if actionNeuron.name == neuron.name:
+            return actionNeuron
+    return None
+
+def getIntermediateNeuronInBrain(creature: Creature, neuron: Neuron) -> IntermediateNeuron:
+    for intermediateNeuron in creature.brain.intermediateNeurons:
+        if intermediateNeuron.name == neuron.name:
+            return intermediateNeuron
+        
+def getSourceNeuronInBrain(creature: Creature, neuron: Neuron) -> SensoryNeuron:
+    for sourceNeuron in creature.brain.sensoryNeurons:
+        if sourceNeuron.name == neuron.name:
+            return sourceNeuron
+    return None
 
 def getSourceNeuron(creature: Creature, sensoryNeurons: list, binaryGene: list()) -> Neuron:
     # Gets the source neuron
