@@ -3,7 +3,8 @@ from model.creature import Creature
 
 from service.worldService import generateWorld, insertCreatureRandomPosition
 from service.creatureService import generateCreatureWithGenome
-from service.geneticsService import generateActionNeurons, generateInputNeurons, generateIntermediateNeurons
+from service.geneticsService import generateActionNeurons, generateInputNeurons
+from service.brainService import generateCreatureBrain
 
 def handleSimulation(settings: dict):
     worldSettings = settings["worldSettings"]
@@ -34,13 +35,11 @@ def handleSimulation(settings: dict):
     creatures = list()
     for i in range(worldSettings["startPopulation"]):
         creatures.append(generateCreatureWithGenome(creatureSettings))
-
     if isDebug: print("Finished generating creatures. Total: " + str(len(creatures)))
 
     if isDebug: print("Inserting creatures into world randomly.")
     for creature in creatures:
         insertCreatureRandomPosition(world, creature)
-    
     if isDebug: print("Finished inserting creatures. World population: " + str(world.population))
 
     # ========== load neurons ==========
@@ -55,3 +54,14 @@ def handleSimulation(settings: dict):
         print("Finished loading neurons.")
         print("Total sensory neurons: " + str(len(sensoryNeurons)))
         print("Total action neurons: " + str(len(actionNeurons)))
+
+    # ========== generating creature's brains ==========
+    if isDebug:
+        print("=================================")
+        print("Generating brains")
+    
+    for creature in creatures:
+        generateCreatureBrain(creature, sensoryNeurons, actionNeurons, creatureSettings["weightDivisor"])
+
+    if isDebug:
+        print("Finished generating creature's brains")
