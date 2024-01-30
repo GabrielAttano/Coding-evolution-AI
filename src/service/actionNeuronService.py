@@ -6,6 +6,9 @@ from src.service.functions.actionNeuronFunctions import Actions
 import random
 
 def doAction(world: World, creature: Creature, action: Actions):
+    if action == None:
+        return
+    
     # move Facing directions
     if action.value == Actions.MOVE_FORWARD_FACING.value:
         moveForwardFacing(world, creature)
