@@ -2,14 +2,15 @@ from model.world import World
 from model.creature import Creature
 from model.brain import Brain, Connection
 
-from service.worldService import generateWorld, insertCreatureRandomPosition
+from service.worldService import generateWorld, insertCreatureRandomPosition, paintWorld, createVideo
 from service.creatureService import generateCreatureWithGenome
 from service.geneticsService import generateActionNeurons, generateInputNeurons
-from service.brainService import generateCreatureBrain
+from service.brainService import generateCreatureBrain, simulateBrain
 
 def handleSimulation(settings: dict):
     worldSettings = settings["worldSettings"]
     creatureSettings = settings["creatureSettings"]
+    simulationSettings = settings["simulationSettings"]
     isDebug = settings["debug"]
 
     if isDebug:
@@ -73,3 +74,16 @@ def handleSimulation(settings: dict):
 
     if isDebug:
         print("Finished generating creature's brains")
+
+    saveVideo: bool = settings["saveVideo"]
+    frameList = list()
+    for i in range(simulationSettings["totalSteps"]):
+        # if isDebug: 
+        print(f"Simulating step {i}")
+        for creature in creatures:
+            simulateBrain(world, creature)
+        if saveVideo:
+            paintWorld(world, True, frameList)
+        
+    if saveVideo: createVideo(frameList)
+    
