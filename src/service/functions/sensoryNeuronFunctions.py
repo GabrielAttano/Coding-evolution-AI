@@ -32,7 +32,10 @@ def facingCreature(world: World, creature: Creature):
     if creature.facing.value == facingDirection.LEFT.value:
         if posX-1 >= 0:
             cell = world.cells[posY][posX-1]
-
+            
+    if cell == None: 
+        return 0
+    
     if cell.isCreature:
         return 1
     else:
