@@ -1,5 +1,4 @@
 import math
 
-def getOutput(inputs: list):
-    inputSum = sum(inputs)
-    return math.tanh(inputSum)
+def getOutput(input: float):
+    return math.tanh(input)
