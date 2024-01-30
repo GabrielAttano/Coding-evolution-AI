@@ -1,14 +1,22 @@
 from model.creature import Creature
 from model.genetics import ActionNeuron, SensoryNeuron, IntermediateNeuron, NeuronTypes, Neuron
 from model.brain import Connection
+from model.world import World
+
 from service.geneticsService import generateIntermediateNeurons
+from service.actionNeuronService import doAction
+from service.functions.intermediateNeuronFunctions import getOutput
+from service.functions.actionNeuronFunctions import Actions
 
 import copy
+
+# Brain generation
 
 def generateCreatureBrain(creature: Creature, sensoryNeurons: list, actionNeurons: list, weightDivisor: int):
     # generate all intermediateNeurons
     creature.brain.intermediateNeurons = generateIntermediateNeurons(creature.innerNeurons)
-
+    
+    # generate connections
     for gene in creature.genome:
         binaryGene = decodeGeneToBinary(gene)
 
@@ -33,13 +41,15 @@ def generateCreatureBrain(creature: Creature, sensoryNeurons: list, actionNeuron
 
         connection: Connection = createConnection(creature, sourceNeuron, sinkNeuron, weight)
 
-        print("Connection:")
+        # print("Connection:")
         # print(connection.sourceNeuron)
         # print(connection.sinkNeuron)
         # print(connection.weight)
-        print("source: " + connection.sourceNeuron.name + " | Sink: " + connection.sinkNeuron.name + " | weight: " + str(connection.weight))
+        # print("source: " + connection.sourceNeuron.name + " | Sink: " + connection.sinkNeuron.name + " | weight: " + str(connection.weight))
 
         creature.brain.connections.append(connection)
+
+    sortConnections(creature)
 
 def createConnection(creature: Creature, sourceNeuron: Neuron, sinkNeuron: Neuron, weight: float) -> Connection:
     connection = Connection()
@@ -88,6 +98,69 @@ def createConnection(creature: Creature, sourceNeuron: Neuron, sinkNeuron: Neuro
 
     return connection
 
+# Simulation
+
+def simulateBrain(world: World, creature: Creature):
+    updateSensoryNeurons(world, creature)
+    resetSinkNeurons(creature)
+
+    connection: Connection = None
+    for connection in creature.brain.connections:
+        simulateConnection(connection)
+    
+    finalAction: Actions = None
+    finalActionValue = 0
+
+    actionNeuron: ActionNeuron = None
+    for actionNeuron in creature.brain.actionNeurons:
+        action: Actions = actionNeuron.actionFunction(creature, actionNeuron.outputValue)
+        if action != None and actionNeuron.outputValue > finalActionValue:
+            finalAction = action
+            finalActionValue = actionNeuron.outputValue
+    
+    if finalAction != None:
+        doAction(world, creature, finalAction)
+    
+def simulateConnection(connection: Connection):
+    sourceNeuron: Neuron = connection.sourceNeuron
+    sinkNeuron: Neuron = connection.sinkNeuron
+
+    sinkNeuron.inputValue += sourceNeuron.outputValue * connection.weight
+
+    sinkType = connection.sinkNeuron.type.value
+    if sinkType == NeuronTypes.ACTION.value or sinkType == NeuronTypes.INTERMEDIATE.value:
+        sinkNeuron.outputValue = getOutput(sinkNeuron.inputValue)
+
+# Getters and utils
+def sortConnections(creature: Creature) -> list:
+    sourceStartConnections = list()
+    intermediateStartConnections = list()
+
+    connection: Connection = None
+    for connection in creature.brain.connections:
+        if connection.sourceNeuron.type.value == NeuronTypes.SENSORY.value:
+            sourceStartConnections.append(connection)
+        if connection.sourceNeuron.type.value == NeuronTypes.INTERMEDIATE.value:
+            intermediateStartConnections.append(connection)
+    
+    sourceStartConnections.extend(intermediateStartConnections)
+    creature.brain.connections = sourceStartConnections
+
+def resetSinkNeurons(creature: Creature):
+    intermediateNeuron: IntermediateNeuron = None
+    for intermediateNeuron in creature.brain.intermediateNeurons:
+        intermediateNeuron.inputValue = 0
+        intermediateNeuron.outputValue = 0
+    actionNeuron: ActionNeuron = None
+    for actionNeuron in creature.brain.actionNeurons:
+        actionNeuron.inputValue = 0
+        actionNeuron.outputValue = 0
+
+def updateSensoryNeurons(world: World, creature: Creature):
+    currentNeuron: SensoryNeuron = None
+    for currentNeuron in creature.brain.sensoryNeurons:
+        currentNeuron.outputValue = currentNeuron.sensoryFunction(world, creature)
+        
 def getSinkNeuronInBrain(creature: Creature, neuron: Neuron) -> ActionNeuron:
     for actionNeuron in creature.brain.actionNeurons:
         if actionNeuron.name == neuron.name:
