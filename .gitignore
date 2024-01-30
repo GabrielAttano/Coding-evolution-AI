@@ -35,3 +35,6 @@ egg-info/
 
 # Local configuration file
 *.local
+
+# Others
+*.avi
