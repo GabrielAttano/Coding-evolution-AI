@@ -1,20 +1,21 @@
 {
     "creatureSettings": 
     {
-        "genomeLength": 128,
-        "innerNeurons": 6,
+        "genomeLength": 1000,
+        "innerNeurons": 128,
         "weightDivisor": 8000,
         "maxAge": 20
     },
     "worldSettings":
     {
         "worldSize": 1000,
-        "startPopulation": 600
+        "startPopulation": 1000
     },
     "simulationSettings":
     {
-        "totalSteps": 1500
+        "totalSteps": 300
     },
-    "debug": false,
-    "saveVideo": true
+    "debug": true,
+    "saveVideo": false,
+    "showTime": true
 }

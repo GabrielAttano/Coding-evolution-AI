@@ -7,6 +7,8 @@ from service.creatureService import generateCreatureWithGenome
 from service.geneticsService import generateActionNeurons, generateInputNeurons
 from service.brainService import generateCreatureBrain, simulateBrain
 
+from datetime import datetime
+
 def handleSimulation(settings: dict):
     worldSettings = settings["worldSettings"]
     creatureSettings = settings["creatureSettings"]
@@ -19,6 +21,8 @@ def handleSimulation(settings: dict):
         print("=================================")
         print("World settings: " + str(worldSettings))
         print("Creature settings: " + str(creatureSettings))
+
+    scriptStartTime = datetime.now()
 
     # ========== Creating world ==========
     if isDebug:
@@ -74,16 +78,23 @@ def handleSimulation(settings: dict):
 
     if isDebug:
         print("Finished generating creature's brains")
+    scriptEndTime = datetime.now()
 
     saveVideo: bool = settings["saveVideo"]
     frameList = list()
+    simulationStartT = datetime.now()
     for i in range(simulationSettings["totalSteps"]):
-        # if isDebug: 
-        print(f"Simulating step {i}")
+        if isDebug: 
+            print(f"Simulating step {i}")
         for creature in creatures:
             simulateBrain(world, creature)
         if saveVideo:
             paintWorld(world, True, frameList)
-        
+    simulationEndT = datetime.now()
+
     if saveVideo: createVideo(frameList)
+    if settings["showTime"]: 
+        print(f"Setup total time: {str(scriptEndTime-scriptStartTime)}")
+        print(f"Simulation total time: {str(simulationEndT-simulationStartT)}")
+        
     
