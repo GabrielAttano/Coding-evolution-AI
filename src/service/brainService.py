@@ -32,23 +32,11 @@ def generateCreatureBrain(creature: Creature, sensoryNeurons: list, actionNeuron
         sign = 1 if binaryGene[4][0] == '0' else -1
         decimalValue = int(binaryGene[4][1:], 2) * sign
         weight = decimalValue / weightDivisor
-        
-        # print("Raw neurons:")
-        # print(sourceNeuron)
-        # print(sinkNeuron)
-        # print(weight)
-        # print("source: " + sourceNeuron.name + " | Sink: " + sinkNeuron.name + " | weight: " + str(weight))
 
         connection: Connection = createConnection(creature, sourceNeuron, sinkNeuron, weight)
-
-        # print("Connection:")
-        # print(connection.sourceNeuron)
-        # print(connection.sinkNeuron)
-        # print(connection.weight)
-        # print("source: " + connection.sourceNeuron.name + " | Sink: " + connection.sinkNeuron.name + " | weight: " + str(connection.weight))
-
         creature.brain.connections.append(connection)
 
+    removeUselessConnections(creature)
     sortConnections(creature)
 
 def createConnection(creature: Creature, sourceNeuron: Neuron, sinkNeuron: Neuron, weight: float) -> Connection:
@@ -98,6 +86,43 @@ def createConnection(creature: Creature, sourceNeuron: Neuron, sinkNeuron: Neuro
 
     return connection
 
+def removeUselessConnections(creature: Creature):
+    connection: Connection = None
+    totalIntermediateConnections = dict()
+    for intermediateNeuron in creature.brain.intermediateNeurons:
+        totalIntermediateConnections[intermediateNeuron.name] = 0
+
+    for connection in creature.brain.connections:
+        if connection.sourceNeuron.type.value == NeuronTypes.INTERMEDIATE.value:
+            # check if not connected to self
+            if connection.sinkNeuron.type.value == NeuronTypes.INTERMEDIATE.value:
+                if connection.sourceNeuron.name == connection.sinkNeuron.name:
+                    continue
+            # add to total connection count
+            key = connection.sourceNeuron.name
+            totalIntermediateConnections[key] += 1
+
+    for key, value in totalIntermediateConnections.items():
+        if value == 0:
+            # print(f"Removing unused connections where sink and source is {key}")
+            # print(f"Current total connections: {str(len(creature.brain.connections))}")
+            removeSinkConnectionsByKey(creature, key)
+            removeSourceConnectionsByKey(creature, key)
+            # print(f"new total connections: {str(len(creature.brain.connections))}")
+            
+
+def removeSinkConnectionsByKey(creature: Creature, key: str):
+    filteredConnections = [
+        connection for connection in creature.brain.connections if connection.sinkNeuron.name != key
+        ]
+    creature.brain.connections = filteredConnections
+
+def removeSourceConnectionsByKey(creature: Creature, key: str):
+    filteredConnections = [
+        connection for connection in creature.brain.connections if connection.sourceNeuron.name != key
+        ]
+    creature.brain.connections = filteredConnections
+    
 # Simulation
 
 def simulateBrain(world: World, creature: Creature):
@@ -131,7 +156,7 @@ def simulateConnection(connection: Connection):
     if sinkType == NeuronTypes.ACTION.value or sinkType == NeuronTypes.INTERMEDIATE.value:
         sinkNeuron.outputValue = getOutput(sinkNeuron.inputValue)
 
-# Getters and utils
+# Getters and utils        
 def sortConnections(creature: Creature) -> list:
     sourceStartConnections = list()
     intermediateStartConnections = list()
