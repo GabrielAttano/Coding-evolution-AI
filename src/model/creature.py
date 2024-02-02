@@ -1,5 +1,4 @@
 from src.model.brain import Brain
-
 from enum import Enum
 
 class facingDirection(Enum):
@@ -17,6 +16,7 @@ class Creature:
         self.responsiveness = 1.0
         
         self.brain = Brain()
+        self.queuedAction = None
 
         self.age = 0
         self.maxAge = maxAge

@@ -4,7 +4,6 @@ from model.brain import Connection
 from model.world import World
 
 from service.geneticsService import generateIntermediateNeurons
-from service.actionNeuronService import doAction
 from service.functions.intermediateNeuronFunctions import getOutput
 from service.functions.actionNeuronFunctions import Actions
 
@@ -139,12 +138,11 @@ def simulateBrain(world: World, creature: Creature):
     actionNeuron: ActionNeuron = None
     for actionNeuron in creature.brain.actionNeurons:
         action: Actions = actionNeuron.actionFunction(creature, actionNeuron.outputValue)
-        if action != None and actionNeuron.outputValue > finalActionValue:
+        if action != None and abs(actionNeuron.outputValue) > finalActionValue:
             finalAction = action
-            finalActionValue = actionNeuron.outputValue
+            finalActionValue = abs(actionNeuron.outputValue)
     
-    if finalAction != None:
-        doAction(world, creature, finalAction)
+    creature.queuedAction = finalAction
     
 def simulateConnection(connection: Connection):
     sourceNeuron: Neuron = connection.sourceNeuron

@@ -1,11 +1,12 @@
 from model.world import World
 from model.creature import Creature
-from model.brain import Brain, Connection
+from model.brain import Brain
 
 from service.worldService import generateWorld, insertCreatureRandomPosition, paintWorld, createVideo
 from service.creatureService import generateCreatureWithGenome
 from service.geneticsService import generateActionNeurons, generateInputNeurons
 from service.brainService import generateCreatureBrain, simulateBrain
+from service.actionNeuronService import doAction
 
 from datetime import datetime
 
@@ -84,12 +85,15 @@ def handleSimulation(settings: dict):
     frameList = list()
     simulationStartT = datetime.now()
     for i in range(simulationSettings["totalSteps"]):
-        if isDebug: 
-            print(f"Simulating step {i}")
+        if isDebug: print(f"Simulating step {i}")
+
+        # Simulate brain of creatures to get queued action
         for creature in creatures:
             simulateBrain(world, creature)
-        if saveVideo:
-            paintWorld(world, True, frameList)
+        # do queued actions
+        for creature in creatures:
+            doAction(world, creature, creature.queuedAction)
+        if saveVideo: paintWorld(world, True, frameList)
     simulationEndT = datetime.now()
 
     if saveVideo: createVideo(frameList)
