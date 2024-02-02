@@ -14,7 +14,7 @@ def handleSimulation(settings: dict):
     worldSettings = settings["worldSettings"]
     creatureSettings = settings["creatureSettings"]
     simulationSettings = settings["simulationSettings"]
-    isDebug = settings["debug"]
+    isDebug = simulationSettings["debug"]
 
     if isDebug:
         print("=================================")
@@ -36,18 +36,12 @@ def handleSimulation(settings: dict):
     if isDebug: print("Finished creating world.")
 
     # ========== Populating world ==========
+    startPopulation = worldSettings["startPopulation"]
     if isDebug: 
         print("=================================")
-        print("Generating creatures. Total: " + str(worldSettings["startPopulation"]))
-    creatures = list()
-    for i in range(worldSettings["startPopulation"]):
-        creatures.append(generateCreatureWithGenome(creatureSettings))
-    if isDebug: print("Finished generating creatures. Total: " + str(len(creatures)))
+        print("Generating creatures. Total: " + str(startPopulation))
 
-    if isDebug: print("Inserting creatures into world randomly.")
-    for creature in creatures:
-        insertCreatureRandomPosition(world, creature)
-    if isDebug: print("Finished inserting creatures. World population: " + str(world.population))
+    creatures = populateWorld(startPopulation, world, isDebug, creatureSettings)
 
     # ========== load neurons ==========
     if isDebug:
@@ -81,10 +75,23 @@ def handleSimulation(settings: dict):
         print("Finished generating creature's brains")
     scriptEndTime = datetime.now()
 
-    saveVideo: bool = settings["saveVideo"]
-    frameList = list()
+    simulateGeneration(creatures, world, simulationSettings)
+
+    if simulationSettings["showTime"]: print(f"Setup total time: {str(scriptEndTime-scriptStartTime)}")
+
+def simulateGeneration(creatures: list, world: World, simulationSettings: dict):
+    # Loading configs
+    isDebug = simulationSettings["debug"]
+    showTime = simulationSettings["showTime"]
+    saveVideo = simulationSettings["saveVideo"]
+    totalSteps = simulationSettings["totalSteps"]
+    # Others
     simulationStartT = datetime.now()
-    for i in range(simulationSettings["totalSteps"]):
+    frameList = list()
+
+    if isDebug: print("Starting simulation")
+    creature: Creature = None
+    for i in range(totalSteps):
         if isDebug: print(f"Simulating step {i}")
 
         # Simulate brain of creatures to get queued action
@@ -93,12 +100,24 @@ def handleSimulation(settings: dict):
         # do queued actions
         for creature in creatures:
             doAction(world, creature, creature.queuedAction)
-        if saveVideo: paintWorld(world, True, frameList)
-    simulationEndT = datetime.now()
 
-    if saveVideo: createVideo(frameList)
-    if settings["showTime"]: 
-        print(f"Setup total time: {str(scriptEndTime-scriptStartTime)}")
-        print(f"Simulation total time: {str(simulationEndT-simulationStartT)}")
-        
-    
+        if saveVideo: paintWorld(world, True, frameList)
+
+    if isDebug: print("Finished simulation")
+    simulationEndT = datetime.now()
+    if showTime: print(f"Simulation total time: {str(simulationEndT-simulationStartT)}")
+
+def populateWorld(totalPopulation: int, world: World, isDebug: bool, creatureSettings: dict) -> list:
+    creatures = list()
+    for _ in range(totalPopulation):
+        creatures.append(generateCreatureWithGenome(creatureSettings))
+
+    if isDebug: print("Finished generating creatures. Total: " + str(len(creatures)))
+    if isDebug: print("Inserting creatures into world randomly.")
+
+    for creature in creatures:
+        insertCreatureRandomPosition(world, creature)
+
+    if isDebug: print("Finished inserting creatures. World population: " + str(world.population))
+
+    return creatures
