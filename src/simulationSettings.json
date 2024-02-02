@@ -9,13 +9,13 @@
     "worldSettings":
     {
         "worldSize": 1000,
-        "startPopulation": 1000
+        "startPopulation": 100
     },
     "simulationSettings":
     {
-        "totalSteps": 300
-    },
-    "debug": true,
-    "saveVideo": false,
-    "showTime": true
+        "totalSteps": 300,
+        "debug": true,
+        "saveVideo": true,
+        "showTime": true
+    }
 }
