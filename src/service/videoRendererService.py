@@ -4,8 +4,9 @@ import numpy as np
 import cv2
 
 class VideoRenderer:
-    def __init__(self) -> None:
+    def __init__(self, fps = 30) -> None:
         self.inMemoryFrames = list()
+        self.fps = fps
 
     def saveFrame(self, world: World):
         blank_image = np.ones((world.worldSize, world.worldSize, 3), dtype=np.uint8) * 255
@@ -23,7 +24,7 @@ class VideoRenderer:
         height, width, _ = self.inMemoryFrames[0].shape
         size = (width, height)
 
-        out = cv2.VideoWriter(name+'.avi', cv2.VideoWriter_fourcc(*'DIVX'), 30, size)
+        out = cv2.VideoWriter(name+'.mp4', cv2.VideoWriter_fourcc(*'mp4v'), self.fps, size)
 
         for i in range(len(self.inMemoryFrames)):
             resized_frame = cv2.resize(self.inMemoryFrames[i], size, interpolation=cv2.INTER_NEAREST)
