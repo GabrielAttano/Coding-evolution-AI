@@ -1,8 +1,8 @@
 {
     "creatureSettings": 
     {
-        "genomeLength": 16,
-        "innerNeurons": 8,
+        "genomeLength": 4,
+        "innerNeurons": 1,
         "weightDivisor": 8000,
         "maxAge": 10,
         "mutationChance": 0.001
@@ -14,7 +14,7 @@
     },
     "simulationSettings":
     {   
-        "totalGenerations": 1500,
+        "totalGenerations": 1,
         "totalSteps": 300,
         "debug": false,
         "saveVideo": true,
