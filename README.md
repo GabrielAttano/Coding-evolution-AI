@@ -38,13 +38,13 @@ To change the settings of the application, you can do them in the simulationSett
 
 Here's how it looks:
 ```json
-{
+[{
     "creatureSettings": 
     {
-        "genomeLength": 32,
-        "innerNeurons": 4,
+        "genomeLength": 16,
+        "innerNeurons": 8,
         "weightDivisor": 8000,
-        "maxAge": 20,
+        "maxAge": 10,
         "mutationChance": 0.001
     },
     "worldSettings":
@@ -61,7 +61,7 @@ Here's how it looks:
         "showTime": true,
         "saveVideoGenerations": [0, 10, 20, 50, 100, 250, 500, 750, 1000, 1499]
     }
-}
+}](src/simulationSettings.json)
 ```
 #### Creature settings
 `genomeLength` The amount of genes in each creature genome.
