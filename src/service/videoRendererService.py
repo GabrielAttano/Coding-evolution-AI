@@ -4,21 +4,24 @@ import numpy as np
 import cv2
 
 class VideoRenderer:
-    def __init__(self, fps = 30) -> None:
+    def __init__(self, fps = 30, upscaleFactor = 10) -> None:
         self.inMemoryFrames = list()
         self.fps = fps
+        self.upscaleFactor = upscaleFactor
 
     def saveFrame(self, world: World):
-        blank_image = np.ones((world.worldSize, world.worldSize, 3), dtype=np.uint8) * 255
+        upscaledSize = (world.worldSize * self.upscaleFactor, world.worldSize * self.upscaleFactor, 3)
+        blankImage = np.ones(upscaledSize, dtype=np.uint8) * 255
 
         for row in reversed(range(world.worldSize)):
             for col in range(world.worldSize):
                 if world.cells[row][col].isCreature:
-                    x, y = row, col
-                    cv2.circle(blank_image, (y, x), radius = 1, color=(0, 0, 255), thickness=-1)
+                    x, y = row * self.upscaleFactor, col * self.upscaleFactor
+                    center = (y + self.upscaleFactor // 2, x + self.upscaleFactor // 2)
+                    cv2.circle(blankImage, center, self.upscaleFactor // 2, color=(0, 0, 255), thickness=-1)
 
         # Save the image
-        self.inMemoryFrames.append(blank_image.copy())
+        self.inMemoryFrames.append(blankImage.copy())
 
     def createVideo(self, name: str):
         height, width, _ = self.inMemoryFrames[0].shape
