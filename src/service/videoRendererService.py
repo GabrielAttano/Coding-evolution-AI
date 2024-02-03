@@ -1,4 +1,5 @@
 from model.world import World, CellData
+from service.brainService import decodeGeneToBinary
 
 import numpy as np
 import cv2
@@ -16,9 +17,10 @@ class VideoRenderer:
         for row in reversed(range(world.worldSize)):
             for col in range(world.worldSize):
                 if world.cells[row][col].isCreature:
+                    creatureColor = self.getColorFromGenome(world.cells[row][col].creature.genome)
                     x, y = row * self.upscaleFactor, col * self.upscaleFactor
                     center = (y + self.upscaleFactor // 2, x + self.upscaleFactor // 2)
-                    cv2.circle(blankImage, center, self.upscaleFactor // 2, color=(0, 0, 255), thickness=-1)
+                    cv2.circle(blankImage, center, self.upscaleFactor // 2, color=creatureColor, thickness=-1)
 
         # Save the image
         self.inMemoryFrames.append(blankImage.copy())
@@ -37,3 +39,15 @@ class VideoRenderer:
 
     def clearFrames(self):
         self.inMemoryFrames.clear()
+
+    def getColorFromGenome(self, genome: list):
+        redBinary = decodeGeneToBinary(genome[0])
+        greenBinary = decodeGeneToBinary(genome[len(genome)//2])
+        blueBinary = decodeGeneToBinary(genome[-1])
+
+        red = int(redBinary[1], 2) % 255
+        green = int(greenBinary[3], 2) % 255
+        blue = int(blueBinary[1], 2) % 255
+
+        return (blue, green, red)
+        

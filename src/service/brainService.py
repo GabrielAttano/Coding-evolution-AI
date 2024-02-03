@@ -109,7 +109,6 @@ def removeUselessConnections(creature: Creature):
             removeSourceConnectionsByKey(creature, key)
             # print(f"new total connections: {str(len(creature.brain.connections))}")
             
-
 def removeSinkConnectionsByKey(creature: Creature, key: str):
     filteredConnections = [
         connection for connection in creature.brain.connections if connection.sinkNeuron.name != key
