@@ -1,13 +1,28 @@
 import secrets
+import random
 
-from src.model.genetics import Neuron, NeuronTypes, SensoryNeuron, ActionNeuron, IntermediateNeuron
+from model.genetics import SensoryNeuron, ActionNeuron, IntermediateNeuron
 
-import src.service.functions.sensoryNeuronFunctions as snFunctions
-import src.service.functions.actionNeuronFunctions as acFunctions
+import service.functions.sensoryNeuronFunctions as snFunctions
+import service.functions.actionNeuronFunctions as acFunctions
 
 def generateRandomGene() -> str:
     random_hex = secrets.token_hex(4)
     return random_hex
+
+def copyGenome(genome: list, mutationChance: float) -> list:
+    hex_digit_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
+    copiedGenome = list()
+    for gene in genome:
+        copiedGene = ""
+        for char in gene:
+            if random.random() <= mutationChance:
+                index = random.randint(0, len(hex_digit_list)-1)
+                copiedGene += hex_digit_list[index]
+            else:
+                copiedGene += char
+        copiedGenome.append(copiedGene)
+    return copiedGenome          
 
 def generateInputNeurons() -> list:
     inputNeurons = list()
