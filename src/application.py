@@ -1,4 +1,5 @@
-from src.service.simulationService import handleSimulation
+from service.simulationService import handleSimulation
+from service.settingsService import SettingsHandler
 
 import json
 import os
@@ -14,5 +15,5 @@ def loadSettings() -> dict:
     return settings
 
 if __name__ == "__main__":
-    settings = loadSettings()
-    handleSimulation(settings)
+    settingsHandler = SettingsHandler()
+    handleSimulation(settingsHandler)
