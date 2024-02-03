@@ -18,6 +18,7 @@
         "totalSteps": 300,
         "debug": false,
         "saveVideo": true,
-        "showTime": true
+        "showTime": true,
+        "saveVideoGenerations": [0, 10, 20, 50, 100, 250, 500, 750, 1000, 1499]
     }
 }
