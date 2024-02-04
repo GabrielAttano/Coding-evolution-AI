@@ -14,7 +14,7 @@
     },
     "simulationSettings":
     {   
-        "totalGenerations": 1,
+        "totalGenerations": 1500,
         "totalSteps": 300,
         "debug": false,
         "saveVideo": true,
