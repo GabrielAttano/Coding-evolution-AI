@@ -40,6 +40,12 @@ def generateCreatureBrain(creature: Creature, neuronsHandler: NeuronsHandler, we
     removeUselessConnections(creature)
     sortConnections(creature)
 
+    creature.brain.created = True
+
+def generateCreaturesBrain(creatures: list, neuronsHandler, weightDivisor: int):
+    for creature in creatures:
+        generateCreatureBrain(creature, neuronsHandler, weightDivisor)
+
 def createConnection(creature: Creature, sourceNeuron: Neuron, sinkNeuron: Neuron, weight: float) -> Connection:
     connection = Connection()
     # ======= Weight =======
