@@ -1,8 +1,8 @@
 {
     "creatureSettings": 
     {
-        "genomeLength": 16,
-        "innerNeurons": 8,
+        "genomeLength": 4,
+        "innerNeurons": 1,
         "weightDivisor": 8000,
         "maxAge": 10,
         "mutationChance": 0.001

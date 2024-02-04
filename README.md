@@ -33,7 +33,7 @@ To change the settings of the application, you can do them in the simulationSett
 
 Here's how it looks:
 ```json
-[{
+{
     "creatureSettings": 
     {
         "genomeLength": 16,
@@ -56,7 +56,7 @@ Here's how it looks:
         "showTime": true,
         "saveVideoGenerations": [0, 10, 20, 50, 100, 250, 500, 750, 1000, 1499]
     }
-}](src/simulationSettings.json)
+}
 ```
 #### Creature settings
 `genomeLength`: The amount of genes in each creature genome.
@@ -94,13 +94,15 @@ There is only one selection implemented, and it isnt really a choice. Currently,
 Currently, the application is *kind of* running as intended. However, there is crearly *some* performance issues that must be solved, and a overhaul of the very rudimentary video-creating mess that exists right now.
 This is going to be my main focus, along with making the code cleaner and easier to work with. After those issues are solved, the goal is to expand on the main idea from the [video that inspired this project](https://www.youtube.com/watch?v=N3tRFayqVtk&t=905s) and test different ideas for selection, the simulation itself, and easier interaction with the program for a broader audience.
 - [ ] Map renderer
-    - [ ] Color each creature using their genome
-    - [ ] Better solution for the frame generation
+    - [x] Color each creature using their genome
+    - [ ] Scale frame generation
+    - [ ] Faster frame draw
 - [ ] Selections
     - [ ] Fix and add new selections
 - [ ] Refactor code
     - [ ] Better readability
     - [ ] Multiprocesses
+    - [ ] Improve code
 - [ ] Neurons
     - [ ] Add new sensory neurons
 
