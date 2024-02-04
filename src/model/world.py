@@ -1,4 +1,4 @@
-from src.model.creature import Creature
+from model.creature import Creature
 
 class World:
     cells: list
