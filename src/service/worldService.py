@@ -1,6 +1,8 @@
 from model.world import World, CellData
 from model.creature import Creature, facingDirection
 
+from service.creatureService import selfReplicate, generateCreatureWithGenome
+
 import random
 from enum import Enum
 
@@ -59,6 +61,47 @@ def insertCreatureRandomPosition(world: World, creature: Creature):
                 if not currentCell.isCreature and not currentCell.isBlockage:
                     print("force inserting creature")
                     insertCreature(world, i, j, creature)      
+
+def populateWorld(totalPopulation: int, world: World, isDebug: bool, creatureSettings: dict) -> list:
+    creatures = list()
+    for _ in range(totalPopulation):
+        creatures.append(generateCreatureWithGenome(creatureSettings))
+
+    if isDebug: print("Finished generating creatures. Total: " + str(len(creatures)))
+    if isDebug: print("Inserting creatures into world randomly.")
+
+    for creature in creatures:
+        insertCreatureRandomPosition(world, creature)
+
+    if isDebug: print("Finished inserting creatures. World population: " + str(world.population))
+
+    return creatures
+
+def repopulateWorld(totalPopulation: int, world: World, isDebug: bool, creatures: list, mutationChance: float) -> list:
+    validCreatures = list()
+
+    # Gets the creatures below maximum age (and age them +1)
+    creature: Creature = None
+    for creature in creatures:
+        creature.age += 1
+        if creature.age <= creature.maxAge:
+            validCreatures.append(creature)
+    
+    newCreatures = list()
+    while len(newCreatures) < totalPopulation:
+        for creature in validCreatures:
+            newCreatures.append(selfReplicate(creature, mutationChance))
+            if len(newCreatures) >= totalPopulation:
+                break
+
+    if isDebug: print("Finished generating creatures. Total: " + str(len(newCreatures)))
+    if isDebug: print("Inserting creatures into world randomly.")
+
+    for creature in newCreatures:
+        insertCreatureRandomPosition(world, creature)
+    
+    if isDebug: print("Finished inserting creatures. World population: " + str(world.population))
+    return newCreatures
 
 def selectCreaturesInPosition(world: World, selectionType: SelectionTypes, creatures: list) -> list:
     if selectionType.value == SelectionTypes.TOP_LEFT.value:
