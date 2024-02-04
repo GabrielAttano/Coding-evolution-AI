@@ -15,13 +15,14 @@ class SelectionTypes(Enum):
     BOTTOM_LEFT = "bottom-left"
     BOTTOM_RIGHT = "bottom-right"
 
-def generateWorld(world: World, worldSize: int):
-        world.worldSize = worldSize
+def generateWorld(world: World, settingsHandler: SettingsHandler):
+        world.worldSize = settingsHandler.worldSize
+        world.startPopulation = settingsHandler.startPopulation
 
         world.cells = list()
-        for i in range(worldSize):
+        for i in range(settingsHandler.worldSize):
             world.cells.append(list())
-            for j in range(worldSize):
+            for j in range(settingsHandler.worldSize):
                 world.cells[i].append(CellData())
 
 def clearWorld(world: World):
