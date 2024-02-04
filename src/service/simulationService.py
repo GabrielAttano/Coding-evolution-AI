@@ -25,7 +25,7 @@ def handleSimulation(settingsHandler: SettingsHandler):
         print("Creating world. Size: " + str(settingsHandler.worldSize))
         
     world = World()
-    worldService.generateWorld(settingsHandler)
+    worldService.generateWorld(world, settingsHandler)
 
     if settingsHandler.debug: print("Finished creating world.")
 
