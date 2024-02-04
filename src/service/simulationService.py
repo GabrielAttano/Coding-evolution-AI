@@ -6,7 +6,7 @@ from service.videoRendererService import VideoRenderer
 from service.settingsService import SettingsHandler
 import service.worldService as worldService
 from service.creatureService import generateCreatureWithGenome, selfReplicate
-from service.neuronService import generateActionNeurons, generateInputNeurons
+from service.neuronService import generateActionNeurons, generateInputNeurons, NeuronsHandler
 from service.brainService import generateCreatureBrain, simulateBrain
 from service.actionNeuronService import doAction
 
@@ -46,12 +46,11 @@ def handleSimulation(settingsHandler: SettingsHandler):
         print("=================================")
         print("Loading neurons")
 
-    sensoryNeurons = generateInputNeurons()
-    actionNeurons = generateActionNeurons()
+    neuronsHandler = NeuronsHandler()
     if settingsHandler.debug:
         print("Finished loading neurons.")
-        print("Total sensory neurons: " + str(len(sensoryNeurons)))
-        print("Total action neurons: " + str(len(actionNeurons)))
+        print("Total sensory neurons: " + str(len(neuronsHandler.sensoryNeurons)))
+        print("Total action neurons: " + str(len(neuronsHandler.actionNeurons)))
 
     # ========== generating creature's brains ==========
     if settingsHandler.debug:
@@ -60,7 +59,7 @@ def handleSimulation(settingsHandler: SettingsHandler):
     
     for creature in creatures:
         if settingsHandler.debug: print("-------------------------")
-        generateCreatureBrain(creature, sensoryNeurons, actionNeurons, settingsHandler.weightDivisor)
+        generateCreatureBrain(creature, neuronsHandler, settingsHandler.weightDivisor)
         if settingsHandler.debug:
             brain: Brain = creature.brain
             print(f"Total sensory neurons: {str(len(brain.sensoryNeurons))}")
@@ -83,7 +82,7 @@ def handleSimulation(settingsHandler: SettingsHandler):
             saveGenerationVideo = i in settingsHandler.saveVideoGenerations
         
         print(f"Simulating generation {i}")
-        framesInMemory = simulateGeneration(
+        simulateGeneration(
             creatures, 
             world, 
             settingsHandler, 
@@ -100,6 +99,7 @@ def handleSimulation(settingsHandler: SettingsHandler):
         selectedCreatures = worldService.selectCreaturesInPosition(
             world, worldService.SelectionTypes.TOP_LEFT, creatures
         )
+
         print(f"Total selected creatures: {str(len(selectedCreatures))}")
         survivalRate = (len(selectedCreatures) / settingsHandler.startPopulation) * 100
         print(f"Generation {str(i + 1)} survival rate: {str(survivalRate)}%")
@@ -119,8 +119,7 @@ def handleSimulation(settingsHandler: SettingsHandler):
         for creature in creatures:
             generateCreatureBrain(
                 creature, 
-                sensoryNeurons, 
-                actionNeurons, 
+                neuronsHandler, 
                 settingsHandler.weightDivisor
             )
         

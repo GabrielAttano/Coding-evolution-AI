@@ -27,3 +27,4 @@ class ActionNeuron(Neuron):
     def __init__(self, name: str, actionFunction: callable) -> None:
         super().__init__(NeuronTypes.ACTION, name)
         self.actionFunction = actionFunction
+        

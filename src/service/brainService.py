@@ -3,7 +3,7 @@ from model.neuron import ActionNeuron, SensoryNeuron, IntermediateNeuron, Neuron
 from model.brain import Connection
 from model.world import World
 
-from service.neuronService import generateIntermediateNeurons
+from service.neuronService import generateIntermediateNeurons, NeuronsHandler
 from service.functions.intermediateNeuronFunctions import getOutput
 from service.functions.actionNeuronFunctions import Actions
 
@@ -11,7 +11,9 @@ import copy
 
 # Brain generation
 
-def generateCreatureBrain(creature: Creature, sensoryNeurons: list, actionNeurons: list, weightDivisor: int):
+def generateCreatureBrain(creature: Creature, neuronsHandler: NeuronsHandler, weightDivisor: int):
+    sensoryNeurons = neuronsHandler.sensoryNeurons
+    actionNeurons = neuronsHandler.actionNeurons
     # generate all intermediateNeurons
     creature.brain.intermediateNeurons = generateIntermediateNeurons(creature.innerNeurons)
     
