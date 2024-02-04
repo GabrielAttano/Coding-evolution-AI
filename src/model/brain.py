@@ -1,4 +1,4 @@
-from model.genetics import Neuron
+from model.neuron import Neuron
 
 class Brain:
     def __init__(self) -> None:

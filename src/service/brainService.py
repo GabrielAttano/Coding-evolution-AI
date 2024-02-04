@@ -1,9 +1,9 @@
 from model.creature import Creature
-from model.genetics import ActionNeuron, SensoryNeuron, IntermediateNeuron, NeuronTypes, Neuron
+from model.neuron import ActionNeuron, SensoryNeuron, IntermediateNeuron, NeuronTypes, Neuron
 from model.brain import Connection
 from model.world import World
 
-from service.geneticsService import generateIntermediateNeurons
+from service.neuronService import generateIntermediateNeurons
 from service.functions.intermediateNeuronFunctions import getOutput
 from service.functions.actionNeuronFunctions import Actions
 

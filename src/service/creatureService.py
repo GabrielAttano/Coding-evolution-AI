@@ -1,6 +1,6 @@
 from model.creature import Creature
 
-from service.geneticsService import generateRandomGene, copyGenome
+from service.neuronService import generateRandomGene, copyGenome
 
 def generateCreatureWithGenome(settings) -> Creature:
     # creature = Creature(genomeLength, innerNeurons)

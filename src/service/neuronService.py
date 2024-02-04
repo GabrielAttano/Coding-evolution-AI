@@ -1,7 +1,7 @@
 import secrets
 import random
 
-from model.genetics import SensoryNeuron, ActionNeuron, IntermediateNeuron
+from model.neuron import SensoryNeuron, ActionNeuron, IntermediateNeuron
 
 import service.functions.sensoryNeuronFunctions as snFunctions
 import service.functions.actionNeuronFunctions as acFunctions

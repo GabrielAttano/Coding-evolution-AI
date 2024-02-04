@@ -6,7 +6,7 @@ from service.videoRendererService import VideoRenderer
 from service.settingsService import SettingsHandler
 import service.worldService as worldService
 from service.creatureService import generateCreatureWithGenome, selfReplicate
-from service.geneticsService import generateActionNeurons, generateInputNeurons
+from service.neuronService import generateActionNeurons, generateInputNeurons
 from service.brainService import generateCreatureBrain, simulateBrain
 from service.actionNeuronService import doAction
 
