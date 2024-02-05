@@ -57,6 +57,21 @@ def generateInputNeurons() -> list:
         sensoryFunction=snFunctions.adjacentToCreature
     ))
 
+    inputNeurons.append(SensoryNeuron(
+        name="S_lastMovX",
+        sensoryFunction=snFunctions.lastMovementX
+    ))
+
+    inputNeurons.append(SensoryNeuron(
+        name="S_lastMovX",
+        sensoryFunction=snFunctions.lastMovementY
+    ))
+
+    inputNeurons.append(SensoryNeuron(
+        name="S_nearBord",
+        sensoryFunction=snFunctions.nearestBorderDistance
+    ))
+
     return inputNeurons
 
 def generateActionNeurons() -> list:
