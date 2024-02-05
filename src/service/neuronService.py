@@ -1,10 +1,15 @@
 import secrets
 import random
 
-from model.genetics import SensoryNeuron, ActionNeuron, IntermediateNeuron
+from model.neuron import SensoryNeuron, ActionNeuron, IntermediateNeuron
 
 import service.functions.sensoryNeuronFunctions as snFunctions
 import service.functions.actionNeuronFunctions as acFunctions
+
+class NeuronsHandler:
+    def __init__(self) -> None:
+        self.sensoryNeurons = generateInputNeurons()
+        self.actionNeurons = generateActionNeurons()
 
 def generateRandomGene() -> str:
     random_hex = secrets.token_hex(4)

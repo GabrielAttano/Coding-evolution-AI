@@ -1,9 +1,10 @@
-from src.model.creature import Creature
+from model.creature import Creature
 
 class World:
     cells: list
     worldSize: int
     population: int = 0
+    startPopulation: int = 0
 
 class CellData:
     

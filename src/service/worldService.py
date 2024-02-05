@@ -1,6 +1,9 @@
 from model.world import World, CellData
 from model.creature import Creature, facingDirection
 
+from service.creatureService import selfReplicate, generateCreatureWithGenome
+from service.settingsService import SettingsHandler
+
 import random
 from enum import Enum
 
@@ -12,13 +15,14 @@ class SelectionTypes(Enum):
     BOTTOM_LEFT = "bottom-left"
     BOTTOM_RIGHT = "bottom-right"
 
-def generateWorld(world: World, worldSize: int):
-        world.worldSize = worldSize
+def generateWorld(world: World, settingsHandler: SettingsHandler):
+        world.worldSize = settingsHandler.worldSize
+        world.startPopulation = settingsHandler.startPopulation
 
         world.cells = list()
-        for i in range(worldSize):
+        for i in range(settingsHandler.worldSize):
             world.cells.append(list())
-            for j in range(worldSize):
+            for j in range(settingsHandler.worldSize):
                 world.cells[i].append(CellData())
 
 def clearWorld(world: World):
@@ -59,6 +63,53 @@ def insertCreatureRandomPosition(world: World, creature: Creature):
                 if not currentCell.isCreature and not currentCell.isBlockage:
                     print("force inserting creature")
                     insertCreature(world, i, j, creature)      
+
+def populateWorld(world: World, settingsHandler: SettingsHandler) -> list:
+    creatures = list()
+    for _ in range(settingsHandler.startPopulation):
+        creatures.append(generateCreatureWithGenome(settingsHandler.rawCreatureSettings))
+
+    if settingsHandler.debug: 
+        print("Finished generating creatures. Total: " + str(len(creatures)))
+        print("Inserting creatures into world randomly.")
+
+    for creature in creatures:
+        insertCreatureRandomPosition(world, creature)
+
+    if settingsHandler.debug:
+        print("Finished inserting creatures. World population: " + str(world.population))
+
+    return creatures
+
+def repopulateWorld(world: World, creatures: list, settingsHandler: SettingsHandler) -> list:
+    validCreatures = list()
+
+    # Gets the creatures below maximum age (and age them +1)
+    creature: Creature = None
+    for creature in creatures:
+        creature.age += 1
+        if creature.age <= creature.maxAge:
+            validCreatures.append(creature)
+    
+    newCreatures = list()
+    while len(newCreatures) < settingsHandler.startPopulation:
+        for creature in validCreatures:
+            newCreatures.append(selfReplicate(creature, settingsHandler.mutationChance))
+            if len(newCreatures) >= settingsHandler.startPopulation:
+                break
+    
+
+    if settingsHandler.debug: 
+        print("Finished generating creatures. Total: " + str(len(newCreatures)))
+        print("Inserting creatures into world randomly.")
+
+    for creature in newCreatures:
+        insertCreatureRandomPosition(world, creature)
+    
+    if settingsHandler.debug: 
+        print("Finished inserting creatures. World population: " + str(world.population))
+    
+    return newCreatures
 
 def selectCreaturesInPosition(world: World, selectionType: SelectionTypes, creatures: list) -> list:
     if selectionType.value == SelectionTypes.TOP_LEFT.value:

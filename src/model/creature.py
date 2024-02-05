@@ -1,4 +1,4 @@
-from src.model.brain import Brain
+from model.brain import Brain
 from enum import Enum
 
 class facingDirection(Enum):
