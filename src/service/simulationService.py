@@ -79,7 +79,7 @@ def simulateGenerations(settingsHandler: SettingsHandler, neuronsHandler: Neuron
         worldService.clearWorld(world)
 
         # Repopulate creatures with the selected ones
-        creatures = worldService.repopulateWorld(world, creatures, settingsHandler)
+        creatures = worldService.repopulateWorld(world, selectedCreatures, settingsHandler)
         generateCreaturesBrain(creatures, neuronsHandler, settingsHandler.weightDivisor)
 
 
