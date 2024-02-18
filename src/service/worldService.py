@@ -125,7 +125,7 @@ def selectTopLeft(world: World, creatures: list) -> list:
         validY = False
         if creature.positionX >= 0 and creature.positionX <= halfSize:
             validX = True
-        if creature.positionY >= halfSize and creature.positionY <= world.worldSize:
+        if creature.positionY >= 0 and creature.positionY <= halfSize:
             validY = True
         if validX and validY:
             selectedCreatures.append(creature)

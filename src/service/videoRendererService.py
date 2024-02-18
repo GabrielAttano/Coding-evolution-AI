@@ -14,7 +14,7 @@ class VideoRenderer:
         upscaledSize = (world.worldSize * self.upscaleFactor, world.worldSize * self.upscaleFactor, 3)
         blankImage = np.ones(upscaledSize, dtype=np.uint8) * 255
 
-        for row in reversed(range(world.worldSize)):
+        for row in range(world.worldSize):
             for col in range(world.worldSize):
                 if world.cells[row][col].isCreature:
                     creatureColor = self.getColorFromGenome(world.cells[row][col].creature.genome)
