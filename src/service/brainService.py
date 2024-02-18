@@ -12,6 +12,9 @@ import copy
 # Brain generation
 
 def generateCreatureBrain(creature: Creature, neuronsHandler: NeuronsHandler, weightDivisor: int):
+    if creature.brain.isBrainCreated:
+        return
+    
     sensoryNeurons = neuronsHandler.sensoryNeurons
     actionNeurons = neuronsHandler.actionNeurons
     # generate all intermediateNeurons
@@ -40,7 +43,7 @@ def generateCreatureBrain(creature: Creature, neuronsHandler: NeuronsHandler, we
     removeUselessConnections(creature)
     sortConnections(creature)
 
-    creature.brain.created = True
+    creature.brain.isBrainCreated = True
 
 def generateCreaturesBrain(creatures: list, neuronsHandler, weightDivisor: int):
     for creature in creatures:

@@ -6,6 +6,7 @@ class Brain:
         self.intermediateNeurons = list()
         self.actionNeurons = list()
         self.connections = list()
+        self.isBrainCreated = False
 
 class Connection:
     def __init__(self) -> None:
